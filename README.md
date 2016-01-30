@@ -1,4 +1,4 @@
-# Reselect
+# Rereduce
 
 
 Simple reducer library for Redux. It's like Reselect but for reducers.
