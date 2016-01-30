@@ -23,7 +23,7 @@ Note that the API is a first draft and may change in the future. Don't hesitate 
 import {  createReducer  } from 'rereduce'
 
 // Create a simple reducer without dependencies
-const a =  createReducer(function(state = 0, action) {
+const firstReducer =  createReducer(function(state = 0, action) {
   switch (action.type) {
     case 'increment': return state + 1
     case 'decrement': return state - 1
