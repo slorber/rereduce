@@ -7,6 +7,8 @@ Reducers can depend on each others.
 
 It permits to replace the imperative `waitFor` of original Flux implementation by a purely functional approach.
 
+**/!\\ Work in progress**: Current implementation does not play well (yet) with server-side rendering or time-travel.
+
 # API
 
 `createReducer( [reducerDependencies], reducerFunction)`
