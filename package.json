@@ -1,6 +1,6 @@
 {
   "name": "rereduce",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Reducers for Redux.",
   "main": "lib/index.js",
   "jsnext:main": "src/index.js",
@@ -46,6 +46,7 @@
     "eslint": "^1.5",
     "eslint-config-rackt": "1.0.0",
     "eslint-plugin-react": "^3.5.1",
+    "expect": "^1.8.0",
     "isparta": "^3.0.3",
     "mocha": "^2.2.5"
   }

@@ -17,6 +17,22 @@ function defaultMemoize(func, equalityCheck = defaultEqualityCheck) {
   }
 }
 
+function pick(obj, fn) {
+  return Object.keys(obj).reduce((result, key) => {
+    if (fn(obj[key])) {
+      result[key] = obj[key]
+    }
+    return result
+  }, {})
+}
+export function combineReducers(reducers) {
+  var finalReducers = pick(reducers, (val) => typeof val === 'function')
+  return (state = {}, action) => mapValues(finalReducers,
+    (reducer, key) => reducer(state[key], action)
+  )
+}
+
+
 export function mapValues(obj, fn) {
   return Object.keys(obj).reduce((result, key) => {
     result[key] = fn(obj[key], key)
@@ -44,16 +60,62 @@ function parseArgs(args) {
   }
 }
 
+function wrapState(state,dependencies) {
+  if (typeof state === 'object') {
+    if ( typeof state.__dependencies !== 'undefined' ) {
+      throw new Error('__dependencies is a reserved state attribute name')
+    }
+    return {
+      ...state,
+      __dependencies: dependencies
+    }
+  }
+  else {
+    return {
+      value: state,
+      __dependencies: dependencies
+    }
+  }
+}
+
+function unwrapState(state) {
+  if ( Object.keys(state).length === 2
+    && state.__dependencies
+    && typeof state.value !== 'undefined' ) {
+    return state.value
+  }
+  else {
+    return state
+  }
+}
+
 export function createReducer() {
+
   const { reducerDependencies,reducer,reducerMemoizer } = parseArgs(arguments)
 
-  let reducerStates = mapValues(reducerDependencies,() => undefined)
+  const hasDependencies = Object.keys(reducerDependencies).length > 0
 
-  return reducerMemoizer(function finalReducer(state, action) {
-    reducerStates = mapValues(reducerStates,(state,key) => {
-      return reducerDependencies[key](state,action)
-    })
-    return reducer(state,action,reducerStates)
-  })
+  if ( !hasDependencies ) {
+    return reducerMemoizer(reducer)
+  }
 
+  const reducerDependenciesReducer = reducerMemoizer(combineReducers(reducerDependencies))
+
+  const liftedReducer = function (state = { value: undefined, __dependencies: undefined }, action) {
+    const { value, __dependencies } = state
+    const nextDependenciesState = reducerDependenciesReducer(__dependencies,action)
+
+    const nextDependenciesStatesUnwrapped = mapValues(nextDependenciesState,depState => unwrapState(depState))
+
+    const nextReducerState = reducer(value,action,nextDependenciesStatesUnwrapped)
+
+    if ( typeof nextReducerState === 'object' && typeof nextReducerState.__dependencies !== 'undefined') {
+      throw new Error('A reducer that depends on other reducers should not return an object with the __dependencies' +
+        ' attribute as it is a reserved attribute name used by the library')
+    }
+
+    return wrapState(nextReducerState,nextDependenciesState)
+  }
+
+  return reducerMemoizer(liftedReducer)
 }
