@@ -20,11 +20,20 @@ The API is a first draft and may change in the future. Don't hesitate to discuss
 
 If dependencies are provided, `reducerFunction` will be called with a 3rd argument with the state of the dependency reducers.
 
-### Specific to reducers with dependencies
+
+### Simple Reducers (without dependencies)
+
+Rereduce only add basic memoization on the original reducer.
+You don't need to use `rereduce` for those reducers at all. But if you plan to make other reducers depend on your simple reducer, wrapping it with `rereduce` will be more CPU and memory efficient.
+
+
+### Reducers with dependencies
 
 - `reducerFunction` will be called with a 3rd argument with the state of the dependency reducers.
 - The final reducer always an object. If your reducer returns a primitive value, it will be wrapped in an object having a `value` attribute
 - The returned object will have a `__dependencies` attribute that you could simply ignore (don't worry, it does not consume as much additional memory as you may naively think).
+- `__dependencies` is required to keep the reducer stateless.
+- You should take care of the `__dependencies` attribute if you need efficient Redux store serialization/deserialization.
 
 
 # Example
