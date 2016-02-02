@@ -80,7 +80,7 @@ suite('rereduce', () => {
 
   test('reducers can be time-travelled', () => {
 
-    const firstReducer =  createReducer(function (state = 0, action) {
+    const firstReducer =  createReducer((state = 0, action) => {
       switch (action.type) {
         case 'increment': return state + 1
         case 'decrement': return state - 1
@@ -89,9 +89,7 @@ suite('rereduce', () => {
     })
 
     const secondReducer = createReducer({ firstReducer },
-      function (state = 0,action,{ firstReducer }) {
-        return firstReducer + 1
-      }
+      (state = 0,action,{ firstReducer }) => firstReducer + 1
     )
 
     const rootReducer = combineReducers({ firstReducer, secondReducer })
@@ -127,7 +125,7 @@ suite('rereduce', () => {
     const secondReducerCalls = expect.createSpy(() => {  })
     const thirdReducerCalls = expect.createSpy(() => {  })
 
-    const firstReducer =  createReducer(function (state = { counter: 0 }, action) {
+    const firstReducer =  createReducer((state = { counter: 0 }, action) => {
       firstReducerCalls()
       switch (action.type) {
         case 'increment': return { counter: state.counter + 1 }
@@ -137,14 +135,14 @@ suite('rereduce', () => {
     })
 
     const secondReducer = createReducer({ firstReducer }, // declare dependency to firstReducer
-      function (state = 0,action,{ firstReducer }) {
+      (state = 0,action,{ firstReducer }) => {
         secondReducerCalls()
         return firstReducer.counter + 1
       }
     )
 
     const thirdReducer = createReducer({ firstReducer, secondReducer }, // declare dependency to firstReducer
-      function (state = 0,action,{ firstReducer,secondReducer }) {
+      (state = 0,action,{ firstReducer,secondReducer }) => {
         thirdReducerCalls()
         return { thirdResult: firstReducer.counter + secondReducer }
       }
