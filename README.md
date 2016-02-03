@@ -42,7 +42,7 @@ You don't need to use `rereduce` for those reducers at all. But if you plan to m
 
 import {  createReducer  } from 'rereduce'
 
-const firstReducer =  createReducer(function (state = 0, action) {
+const firstReducer =  createReducer((state = 0, action) => {
   switch (action.type) {
     case 'increment': return state + 1
     case 'decrement': return state - 1
@@ -51,9 +51,7 @@ const firstReducer =  createReducer(function (state = 0, action) {
 })
 
 const secondReducer = createReducer({ firstReducer },
-  function (state = 0,action,{ firstReducer }) {
-    return firstReducer + 1
-  }
+  (state = 0,action,{ firstReducer }) => firstReducer + 1
 )
 
 const rootReducer = combineReducers({ firstReducer, secondReducer })

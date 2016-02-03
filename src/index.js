@@ -101,7 +101,7 @@ export function createReducer() {
 
   const reducerDependenciesReducer = reducerMemoizer(combineReducers(reducerDependencies))
 
-  const liftedReducer = function (state = { value: undefined, __dependencies: undefined }, action) {
+  const liftedReducer = (state = { value: undefined, __dependencies: undefined }, action) => {
     const { value, __dependencies } = state
     const nextDependenciesState = reducerDependenciesReducer(__dependencies,action)
 
