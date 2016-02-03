@@ -61,7 +61,7 @@ function parseArgs(args) {
 }
 
 function wrapState(state,dependencies) {
-  if (typeof state === 'object') {
+  if ( typeof state === 'object' ) {
     if ( typeof state.__dependencies !== 'undefined' ) {
       throw new Error('__dependencies is a reserved state attribute name')
     }
@@ -79,7 +79,8 @@ function wrapState(state,dependencies) {
 }
 
 function unwrapState(state) {
-  if ( Object.keys(state).length === 2
+  if ( typeof state === 'object'
+    && Object.keys(state).length === 2
     && state.__dependencies
     && typeof state.value !== 'undefined' ) {
     return state.value
