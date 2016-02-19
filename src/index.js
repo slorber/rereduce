@@ -61,20 +61,9 @@ function parseArgs(args) {
 }
 
 function wrapState(state,dependencies) {
-  if ( typeof state === 'object' ) {
-    if ( typeof state.__dependencies !== 'undefined' ) {
-      throw new Error('__dependencies is a reserved state attribute name')
-    }
-    return {
-      ...state,
-      __dependencies: dependencies
-    }
-  }
-  else {
-    return {
-      value: state,
-      __dependencies: dependencies
-    }
+  return {
+    value: state,
+    __dependencies: dependencies
   }
 }
 

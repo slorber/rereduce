@@ -179,7 +179,7 @@ suite('rereduce', () => {
     assert.equal(state.secondReducerState1, state.secondReducerState2)
     assert.equal(state.secondReducerState1, state.secondReducerState3)
 
-    assert.equal(state.thirdReducerState1.thirdResult, 5)
+    assert.equal(state.thirdReducerState1.value.thirdResult, 5)
     assert.equal(state.thirdReducerState1, state.thirdReducerState2)
     assert.equal(state.thirdReducerState1, state.thirdReducerState3)
   })
