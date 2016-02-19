@@ -30,8 +30,9 @@ You don't need to use `rereduce` for those reducers at all. But if you plan to m
 ### Reducers with dependencies
 
 - `reducerFunction` will be called with a 3rd argument with the state of the dependency reducers.
-- The final reducer always an object. If your reducer returns a primitive value, it will be wrapped in an object having a `value` attribute
-- The returned object will have a `__dependencies` attribute that you could simply ignore (don't worry, it does not consume as much additional memory as you may naively think).
+- The reducer always return an object with 2 attributes `value` and `__dependencies`
+- `value` is the computed value of your reducing function.
+- `__dependencies` is an attribute that you could simply ignore (don't worry, it does not consume as much additional memory as you may naively think).
 - `__dependencies` is required to keep the reducer stateless.
 - You should take care of the `__dependencies` attribute if you need efficient Redux store serialization/deserialization.
 
