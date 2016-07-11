@@ -68,7 +68,8 @@ function wrapState(state,dependencies) {
 }
 
 function unwrapState(state) {
-  if ( typeof state === 'object'
+  if ( state != null
+    && typeof state === 'object'
     && Object.keys(state).length === 2
     && state.__dependencies
     && typeof state.value !== 'undefined' ) {
@@ -99,7 +100,7 @@ export function createReducer() {
 
     const nextReducerState = reducer(value,action,nextDependenciesStatesUnwrapped)
 
-    if ( typeof nextReducerState === 'object' && typeof nextReducerState.__dependencies !== 'undefined') {
+    if ( nextReducerState != null && typeof nextReducerState === 'object' && typeof nextReducerState.__dependencies !== 'undefined') {
       throw new Error('A reducer that depends on other reducers should not return an object with the __dependencies' +
         ' attribute as it is a reserved attribute name used by the library')
     }
