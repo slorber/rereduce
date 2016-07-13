@@ -184,4 +184,18 @@ suite('rereduce', () => {
     assert.equal(state.thirdReducerState1, state.thirdReducerState3)
   })
 
+  test('reducers support null return values', () => {
+    const reducer = createReducer((state = null, action) => {
+      return state
+    })
+
+    const dependentReducer = createReducer({
+      dep: reducer
+    }, (state = null, action, deps) => {
+      return deps.dep
+    })
+
+    let state = dependentReducer(undefined, {type: 'init'});
+    assert.equal(state.value, null)
+  })
 })
